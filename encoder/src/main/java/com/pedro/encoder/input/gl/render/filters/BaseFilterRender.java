@@ -15,13 +15,10 @@ import com.pedro.encoder.utils.gl.GlUtil;
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public abstract class BaseFilterRender extends BaseRenderOffScreen {
 
-  private int width;
-  private int height;
   private int previewWidth;
   private int previewHeight;
 
   protected int previousTexId;
-  private RenderHandler renderHandler = new RenderHandler();
 
   public void initGl(int width, int height, Context context, int previewWidth, int previewHeight) {
     this.width = width;
@@ -45,6 +42,7 @@ public abstract class BaseFilterRender extends BaseRenderOffScreen {
 
   protected abstract void initGlFilter(Context context);
 
+  @Override
   public void draw() {
     GlUtil.checkGlError("drawFilter start");
     GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, renderHandler.getFboId()[0]);
@@ -61,7 +59,6 @@ public abstract class BaseFilterRender extends BaseRenderOffScreen {
     this.previousTexId = texId;
   }
 
-  @Override
   public int getTexId() {
     return renderHandler.getTexId()[0];
   }
