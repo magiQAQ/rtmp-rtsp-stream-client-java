@@ -9,8 +9,8 @@ android {
   defaultConfig {
     minSdkVersion 16
     targetSdkVersion 30
-    versionCode 203
-    versionName "2.0.3"
+    versionCode 204
+    versionName "2.0.4"
   }
   buildTypes {
     release {
@@ -21,4 +21,6 @@ android {
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+  testImplementation 'junit:junit:4.13.2'
 }
