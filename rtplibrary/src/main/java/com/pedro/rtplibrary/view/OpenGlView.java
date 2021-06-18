@@ -8,12 +8,16 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import com.pedro.encoder.input.gl.SurfaceManager;
 import com.pedro.encoder.input.gl.render.ManagerRender;
 import com.pedro.encoder.input.gl.render.filters.BaseFilterRender;
 import com.pedro.encoder.utils.gl.GlUtil;
 import com.pedro.rtplibrary.R;
+
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by pedro on 9/09/17.
@@ -29,6 +33,8 @@ public class OpenGlView extends OpenGlViewBase {
   private boolean keepAspectRatio = false;
   private AspectRatioMode aspectRatioMode = AspectRatioMode.Adjust;
   private boolean isFlipHorizontal = false, isFlipVertical = false;
+
+  private final Semaphore needPreview = new Semaphore(0);
 
   public OpenGlView(Context context) {
     super(context);
@@ -109,6 +115,12 @@ public class OpenGlView extends OpenGlViewBase {
   }
 
   @Override
+  public void surfaceCreated(@NonNull SurfaceHolder holder) {
+    needPreview.release();
+    Log.e("xchxch", "can get surface");
+  }
+
+  @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     Log.i(TAG, "size: " + width + "x" + height);
     this.previewWidth = width;
@@ -118,6 +130,7 @@ public class OpenGlView extends OpenGlViewBase {
 
   @Override
   public void run() {
+    needPreview.acquireUninterruptibly();
     surfaceManager.release();
     surfaceManager.eglSetup(getHolder().getSurface());
     surfaceManager.makeCurrent();
@@ -167,6 +180,7 @@ public class OpenGlView extends OpenGlViewBase {
     } catch (InterruptedException ignore) {
       Thread.currentThread().interrupt();
     } finally {
+      needPreview.release();
       managerRender.release();
       surfaceManager.release();
       surfaceManagerPhoto.release();

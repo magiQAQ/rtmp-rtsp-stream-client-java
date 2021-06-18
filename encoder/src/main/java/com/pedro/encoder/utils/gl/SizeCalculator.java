@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.util.Pair;
 
 /**
@@ -16,6 +17,7 @@ public class SizeCalculator {
       int previewHeight, int streamWidth, int streamHeight) {
     Pair<Point, Point> pair =
         getViewport(keepAspectRatio, mode, previewWidth, previewHeight, streamWidth, streamHeight);
+//    Log.d("SizeCalculator", "" + pair.first.x + pair.first.y + pair.second.x + pair.second.y);
     GLES20.glViewport(pair.first.x, pair.first.y, pair.second.x, pair.second.y);
   }
 

@@ -18,7 +18,7 @@ public class FpsLimiter {
 
   public boolean limitFPS() {
     long lastFrameTimestamp = System.currentTimeMillis() - startTS;
-    if (ratio < lastFrameTimestamp) {
+    if (lastFrameTimestamp > ratio) {
       ratio += ratioF;
       return false;
     }

@@ -62,6 +62,7 @@ import com.pedro.encoder.input.gl.render.filters.object.GifObjectFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.ImageObjectFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.SurfaceFilterRender;
 import com.pedro.encoder.input.gl.render.filters.object.TextObjectFilterRender;
+import com.pedro.encoder.input.video.CameraHelper;
 import com.pedro.encoder.input.video.CameraOpenException;
 import com.pedro.encoder.utils.gl.TranslateTo;
 import com.pedro.rtmp.utils.ConnectCheckerRtmp;
@@ -398,8 +399,9 @@ public class OpenGlRtmpActivity extends AppCompatActivity
     switch (view.getId()) {
       case R.id.b_start_stop:
         if (!rtmpCamera2.isStreaming()) {
+          int rotation = CameraHelper.getCameraOrientation(this);
           if (rtmpCamera2.isRecording()
-              || rtmpCamera2.prepareAudio() && rtmpCamera2.prepareVideo(1920,1080,30,6000*1024,90)) {
+              || rtmpCamera2.prepareAudio() && rtmpCamera2.prepareVideo(1920,1080,30,6000*1024, rotation)) {
             button.setText(R.string.stop_button);
             rtmpCamera2.startStream(etUrl.getText().toString());
           } else {
@@ -462,12 +464,12 @@ public class OpenGlRtmpActivity extends AppCompatActivity
 
   @Override
   public void surfaceCreated(SurfaceHolder surfaceHolder) {
-
+    rtmpCamera2.startPreview(CameraHelper.Facing.FRONT);
   }
 
   @Override
   public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-    rtmpCamera2.startPreview();
+//    rtmpCamera2.startPreview();
   }
 
   @Override

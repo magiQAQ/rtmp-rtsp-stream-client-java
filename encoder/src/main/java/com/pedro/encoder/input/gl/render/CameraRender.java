@@ -60,7 +60,6 @@ public class CameraRender extends BaseRenderOffScreen {
     aTextureCameraHandle = GLES20.glGetAttribLocation(program, "aTextureCoord");
     uMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
     uSTMatrixHandle = GLES20.glGetUniformLocation(program, "uSTMatrix");
-    uSTMatrixHandle = GLES20.glGetUniformLocation(program, "uSTMatrix");
 
     //camera texture
     GlUtil.createExternalTextures(textureID.length, textureID, 0);

@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import com.pedro.encoder.input.gl.SurfaceManager;
 import com.pedro.encoder.input.gl.render.SimpleCameraRender;
@@ -67,6 +69,11 @@ public class LightOpenGlView extends OpenGlViewBase {
 
   public void setCameraFlip(boolean isFlipHorizontal, boolean isFlipVertical) {
     simpleCameraRender.setFlip(isFlipHorizontal, isFlipVertical);
+  }
+
+  @Override
+  public void surfaceCreated(@NonNull SurfaceHolder holder) {
+
   }
 
   @Override

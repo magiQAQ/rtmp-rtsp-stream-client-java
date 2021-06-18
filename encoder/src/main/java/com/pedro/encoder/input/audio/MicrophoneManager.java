@@ -131,10 +131,10 @@ public class MicrophoneManager {
     return created;
   }
 
-  public boolean createInternalMicrophone(AudioPlaybackCaptureConfiguration config, int sampleRate,
-      boolean isStereo) {
-    return createInternalMicrophone(config, sampleRate, isStereo, false, false);
-  }
+//  public boolean createInternalMicrophone(AudioPlaybackCaptureConfiguration config, int sampleRate,
+//      boolean isStereo) {
+//    return createInternalMicrophone(config, sampleRate, isStereo, false, false);
+//  }
 
   /**
    * Start record and get data

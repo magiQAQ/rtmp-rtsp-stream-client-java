@@ -128,29 +128,9 @@ public abstract class Camera2Base implements GetAacData, GetVideoData, GetMicrop
   private void init(Context context) {
     cameraManager = new Camera2ApiManager(context);
     videoEncoder = new VideoEncoder(this);
-    setMicrophoneMode(MicrophoneMode.ASYNC);
+    microphoneManager = new MicrophoneManager(this);
+    audioEncoder = new AudioEncoder(this);
     recordController = new RecordController();
-  }
-
-  /**
-   * Must be called before prepareAudio.
-   *
-   * @param microphoneMode mode to work accord to audioEncoder. By default ASYNC:
-   * SYNC using same thread. This mode could solve choppy audio or AudioEncoder frame discarded.
-   * ASYNC using other thread.
-   */
-  public void setMicrophoneMode(MicrophoneMode microphoneMode) {
-    switch (microphoneMode) {
-      case SYNC:
-        microphoneManager = new MicrophoneManagerManual();
-        audioEncoder = new AudioEncoder(this);
-        audioEncoder.setGetFrame(((MicrophoneManagerManual) microphoneManager).getGetFrame());
-        break;
-      case ASYNC:
-        microphoneManager = new MicrophoneManager(this);
-        audioEncoder = new AudioEncoder(this);
-        break;
-    }
   }
 
   public void setCameraCallbacks(CameraCallbacks callbacks) {
@@ -576,12 +556,12 @@ public abstract class Camera2Base implements GetAacData, GetVideoData, GetMicrop
   private void prepareGlView() {
     if (glInterface != null) {
       glInterface.setFps(videoEncoder.getFps());
-      if (videoEncoder.getRotation() == 90 || videoEncoder.getRotation() == 270) {
+      int rotation = videoEncoder.getRotation();
+      if (rotation == 90 || rotation == 270) {
         glInterface.setEncoderSize(videoEncoder.getHeight(), videoEncoder.getWidth());
       } else {
         glInterface.setEncoderSize(videoEncoder.getWidth(), videoEncoder.getHeight());
       }
-      int rotation = videoEncoder.getRotation();
       glInterface.setRotation(rotation == 0 ? 270 : rotation - 90);
       if (!cameraManager.isRunning() && videoEncoder.getWidth() != previewWidth
           || videoEncoder.getHeight() != previewHeight) {
