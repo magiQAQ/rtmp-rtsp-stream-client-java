@@ -169,11 +169,14 @@ class RtmpClient(private val connectCheckerRtmp: ConnectCheckerRtmp) {
   private fun handleServerPackets() {
     try {
       while (!Thread.interrupted()) {
+        Log.w(TAG, "handleServerPackets")
         handleMessages()
       }
     } catch (e: InterruptedException) {
       Thread.currentThread().interrupt()
-    } catch (e: Exception) { }
+    } catch (e: Exception) {
+      Log.e(TAG, "handleServerPackets error", e)
+    }
   }
 
   private fun getAppName(app: String, name: String): String {
@@ -396,10 +399,56 @@ class RtmpClient(private val connectCheckerRtmp: ConnectCheckerRtmp) {
     disconnect(true)
   }
 
+//  private fun disconnect(clear: Boolean) {
+//    if (isStreaming) rtmpSender.stop(clear)
+//    reader?.close()
+//    reader = null
+//    thread?.looper?.thread?.interrupt()
+//    thread?.looper?.quit()
+//    thread?.quit()
+//    try {
+//      writer?.flush()
+//      thread?.join(100)
+//    } catch (e: Exception) { }
+//    thread = HandlerThread(TAG)
+//    thread?.start()
+//    thread?.let {
+//      val h = Handler(it.looper)
+//      h.post {
+//        try {
+//          writer?.let { writer ->
+//            commandsManager.sendClose(writer)
+//          }
+//          writer?.close()
+//          writer = null
+//          closeConnection()
+//        } catch (e: IOException) {
+//          Log.e(TAG, "disconnect error", e)
+//        } finally {
+//          thread?.looper?.quit()
+//          return@post
+//        }
+//      }
+//    }
+//    try {
+//      thread?.join(200) //wait finish sendClose
+//      thread?.looper?.thread?.interrupt()
+//      thread?.looper?.quit()
+//      thread?.quit()
+//      thread = null
+//    } catch (e: Exception) { }
+//    if (clear) {
+//      reTries = numRetry
+//      doingRetry = false
+//      isStreaming = false
+//      connectCheckerRtmp.onDisconnectRtmp()
+//    }
+//    publishPermitted = false
+//    commandsManager.reset()
+//  }
+
   private fun disconnect(clear: Boolean) {
     if (isStreaming) rtmpSender.stop(clear)
-    reader?.close()
-    reader = null
     thread?.looper?.thread?.interrupt()
     thread?.looper?.quit()
     thread?.quit()
@@ -416,6 +465,8 @@ class RtmpClient(private val connectCheckerRtmp: ConnectCheckerRtmp) {
           writer?.let { writer ->
             commandsManager.sendClose(writer)
           }
+          reader?.close()
+          reader = null
           writer?.close()
           writer = null
           closeConnection()

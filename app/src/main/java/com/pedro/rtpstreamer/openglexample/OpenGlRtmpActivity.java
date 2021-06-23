@@ -401,7 +401,7 @@ public class OpenGlRtmpActivity extends AppCompatActivity
         if (!rtmpCamera2.isStreaming()) {
           int rotation = CameraHelper.getCameraOrientation(this);
           if (rtmpCamera2.isRecording()
-              || rtmpCamera2.prepareAudio() && rtmpCamera2.prepareVideo(1920,1080,30,6000*1024, rotation)) {
+              || rtmpCamera2.prepareAudio() && rtmpCamera2.prepareVideo(1920,1080,30,2500*1024, rotation)) {
             button.setText(R.string.stop_button);
             rtmpCamera2.startStream(etUrl.getText().toString());
           } else {
